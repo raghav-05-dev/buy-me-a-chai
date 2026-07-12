@@ -2,13 +2,14 @@ import React from 'react'
 
 const Navbar = () => {
   return (
-    <nav className='bg-black text-white flex justify-around'>
-      <div className='logo font-bold'>Buy me a chai</div>
+    <nav className='bg-gray-900 text-white flex justify-between p-4 h-16'>
+      <div className='logo font-bold text-lg'>Buy me a chai</div>
       <ul className='flex justify-between gap-4'>
-        <li>home</li>
-        <li>about</li>
-        <li>projects</li>
-        <li>login</li>
+        <li>Home</li>
+        <li>About</li>
+        <li>Projects</li>
+        <li>Sign up</li>
+        <li>Login</li>
       </ul>
     </nav>
   )
