@@ -4,19 +4,22 @@ import Link from 'next/link'
 import { useSession, signIn, signOut } from 'next-auth/react'
 
 const Navbar = () => {
-  const{ data: session} = useSession()
-  if(session){
-    return <>
-    Signed on as {session.user.email} <br/>
-    <button onClick={()=> signOut()}>Sign out</button>
-    </>
-  }
+  const { data: session } = useSession()
+  const [showdropdown, setShowdropdown] = useState(false)
+  // if (session) {
+  //   return <>
+  //     Signed in as {session.user.email} <br />
+  //     <button onClick={() => signOut()}>Sign out</button>
+  //   </>
+  // }
 
   return (
     <nav className='bg-gray-900 text-white flex justify-between p-4 h-16'>
-      <div className='logo font-bold text-lg flex justify-center items-center'>
-        <img src="tea.gif" width={45} alt="" />
-        <span>Buy me a chai</span>
+      <div>
+        <Link className='logo font-bold text-lg flex justify-center items-center' href={'/'}>
+          <img className='invertImg' src="tea.gif" width={45} alt="" />
+          <span>Buy me a chai</span>
+        </Link>
       </div>
       {/* <ul className='flex justify-between gap-4'>
         <li>Home</li>
@@ -25,10 +28,40 @@ const Navbar = () => {
         <li>Sign up</li>
         <li>Login</li>
       </ul> */}
-      <div>
-        <Link href={"/login"}>
-          <button type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Login</button>
-        </Link>
+      <div className='relative flex justify-center items-center  md:block gap-4'>
+        {session && <>
+          <button onClick={() => setShowdropdown(!showdropdown)} onBlur={() => {
+            setTimeout(() => {
+              setShowdropdown(false)
+            }, 100);
+          }} id="dropdownDefaultButton"
+            data-dropdown-toggle="dropdown"
+            className="text-white mx-2 bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2.5 py-2.5 text-center inline-flex items-center dark:focus:ring-blue-800"
+            type="button"
+          >
+            Account
+            <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 ...">
+              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
+            </svg>
+          </button>
+
+          <div id="dropdown" className={`z-10 ${showdropdown ? "" : "hidden"} absolute left-[15px] top-12 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700`}>
+            <ul className="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+              <li>
+                <Link href="/dashboard" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</Link>
+              </li>
+              <li>
+                <Link href={`/${session.user.name}`} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Your Page</Link>
+              </li>
+              <li>
+                <Link onClick={() => signOut()} href="#" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</Link>
+              </li>
+            </ul>
+          </div></>
+        }
+        {/* {session && <button className='text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2' onClick={() => { signOut() }}>Logout</button>} */}
+        {!session && <Link href={"/login"}>
+          <button type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Login</button></Link>}
       </div>
     </nav>
   )
