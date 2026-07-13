@@ -12,7 +12,7 @@ const Username = ({ params }) => {
       </div>
       <div className="info flex flex-col items-center my-10 gap-2 ">
         <span className="font-bold text-3xl -translate-x-4 mt-2">
-          @{params.username}
+          {params.username}
         </span>
 
         <span className="text-slate-400 text-lg -translate-x-4 mt-2">

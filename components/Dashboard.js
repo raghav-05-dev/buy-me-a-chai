@@ -18,9 +18,9 @@ const Dashboard = () => {
         if (!session) {
             router.push('/login')
         }
-        else {
-            getData()
-        }
+        // else {
+        //     getData()
+        // }
     }, [])
 
     // const getData = async () => {
