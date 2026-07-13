@@ -38,14 +38,24 @@ import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 
 export const authOptions = {
-    providers: [
-        GitHub({
-            clientId: process.env.GITHUB_ID,
-            clientSecret: process.env.GITHUB_SECRET,
-        }),
-    ],
+  providers: [
+    GitHub({
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+    }),
+  ],
 
-    secret: process.env.NEXTAUTH_SECRET,
+  // Paste callbacks here
+  callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      if(account.provider == "github"){
+        const client = await mongoose.connect()
+        // const currentUser = await client.db("users").collection("users").findOne({email: email})
+      }
+    },
+  },
+
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 export const { handlers: { GET, POST } } = NextAuth(authOptions);
