@@ -1,6 +1,7 @@
 import React from 'react'
 
-const Username = ({ params }) => {
+const Username = async ({ params }) => {
+  const { username } = await params;
   return (
     <>
       <div className='cover w-full relative'>
@@ -12,7 +13,7 @@ const Username = ({ params }) => {
       </div>
       <div className="info flex flex-col items-center my-10 gap-2 ">
         <span className="font-bold text-3xl -translate-x-4 mt-2">
-          {params.username}
+          {username}
         </span>
 
         <span className="text-slate-400 text-lg -translate-x-4 mt-2">
