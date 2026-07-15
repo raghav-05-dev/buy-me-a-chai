@@ -1,8 +1,9 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Script from 'next/script'
-import { initiate } from '@/actions/useractions'
+import { fetchpayments, initiate } from '@/actions/useractions'
 import { useSession } from 'next-auth/react'
+import { fetchuser } from '@/actions/useractions'
 
 const PaymentPage = ({ username }) => {
   // const {data: session} = useSession()
@@ -12,13 +13,22 @@ const PaymentPage = ({ username }) => {
     amount: ""
   })
   const [currentUser, setcurrentUser] = useState({})
+  const [payments, setPayments] = useState([])
+   
+  useEffect(()=>{
+    getData()
+  },[])
+
   const handleChange = (e) => {
     setPaymentform({ ...paymentform, [e.target.name]: e.target.value })
   }
 
-  const getData = async(params)=>{
+  const getData = async()=>{
     let u = await fetchuser(username)
     setcurrentUser(u)
+    let dbpayments = await fetchpayments(username)
+    setPayments(dbpayments)
+    console.log(u, dbpayments)
   }
 
   const pay = async (amount) => {
@@ -78,15 +88,11 @@ const PaymentPage = ({ username }) => {
           <div className="supporters w-1/2 bg-slate-900 rounded-lg p-10">
             <h2 className="text-2xl font-bold item mb-5">Supporters</h2>
             <ul className='mx-5 text-'>
-              <li className='my-4 flex gap-2 items-center'>
+              {payments.map((p, i)=>{
+                return <li key={p._id} className='my-4 flex gap-2 items-center'>
                 <img width={35} src="avatar.gif" alt="user avatar" />
-                <span>Ben donated <span className='font-bold'>$20</span> with the message "Awesome artwork!!"</span></li>
-              <li className='my-4 flex gap-2 items-center'>
-                <img width={35} src="avatar.gif" alt="user avatar" />
-                <span>Ben donated <span className='font-bold'>$20</span> with the message "Awesome artwork!!"</span></li>
-              <li className='my-4 flex gap-2 items-center'>
-                <img width={35} src="avatar.gif" alt="user avatar" />
-                <span>Ben donated <span className='font-bold'>$20</span> with the message "Awesome artwork!!"</span></li>
+                <span>{p.name} donated <span className='font-bold'>₹{p.amount}</span> with the message "{p.message}"</span></li>
+              })}
             </ul>
           </div>
           <div className="makepayment w-1/2 bg-slate-900 rounded-lg p-10">
@@ -113,7 +119,7 @@ const PaymentPage = ({ username }) => {
                 className='w-full p-3 rounded-lg bg-slate-800'
                 placeholder='Enter Amount'
               />
-              <button type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2">Make Payment</button>
+              <button onClick={() => pay(paymentform.amount)} type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2">Make Payment</button>
             </div>
             <div className='flex gap-2 mt-5'>
               <button className='bg-slate-800 p-3 rounded-lg' onClick={() => pay(10000)}>
