@@ -6,7 +6,9 @@ import connectDb from "@/db/connectDb"
 
 export const initiate = async (amount, to_username, paymentform) => {
     await connectDb()
-    var instance = new Razorpay({ key_id: process.env.NEXT_PUBLIC_KEY_ID, key_secret: process.env.KEY_SECRET })
+    let user = await User.findOne({ username: to_username })
+    const secret = user.razorpaysecret
+    var instance = new Razorpay({ key_id: user.razorpayid, key_secret: secret })
 
     let options = {
         amount: Number(amount) * 100,
@@ -26,7 +28,7 @@ export const fetchuser = async (username) => {
 
 export const fetchpayments = async (username) => {
     await connectDb()
-    let p = await Payment.find({ to_user: username, done:true }).sort({ amount: -1 }).lean()
+    let p = await Payment.find({ to_user: username, done: true }).sort({ amount: -1 }).lean()
     return JSON.parse(JSON.stringify(p))
 }
 

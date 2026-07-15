@@ -28,22 +28,22 @@ const PaymentPage = ({ username }) => {
   }, [])
 
   useEffect(() => {
-        if(searchParams.get("paymentdone") == "true"){
-        toast('Thanks for your donation!', {
-            position: "top-right",
-            autoClose: 1000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-            transition: Bounce,
-            });
-        }
-        router.push(`/${username}`)
-     
-    }, [])
+    if (searchParams.get("paymentdone") == "true") {
+      toast('Thanks for your donation!', {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+    }
+    router.push(`/${username}`)
+
+  }, [])
 
   const handleChange = (e) => {
     setPaymentform({ ...paymentform, [e.target.name]: e.target.value })
@@ -123,6 +123,14 @@ const PaymentPage = ({ username }) => {
         <span className="text-slate-400 text-lg -translate-x-4 mt-2">
           Welcome, and thank you for your support of my work which guarantees me total autonomy and freedom in my art :)
         </span>
+
+        <div className='text-slate-400 text-lg'>
+          Lets help {username} get a chai!
+        </div>
+        <div className='text-slate-400 text-lg'>
+          {payments.length} Payments .   ₹{payments.reduce((a, b) => a + b.amount, 0)} raised
+        </div>
+
         <div className="payment flex gap-3 w-[80%] mt-10">
           <div className="supporters w-1/2 bg-slate-900 rounded-lg p-10">
             <h2 className="text-2xl font-bold item mb-5">Supporters</h2>
@@ -162,13 +170,13 @@ const PaymentPage = ({ username }) => {
               <button onClick={() => pay(paymentform.amount)} type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 disabled:from-blue-500" disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3}>Make Payment</button>
             </div>
             <div className='flex gap-2 mt-5'>
-              <button className='bg-slate-800 p-3 rounded-lg disabled:bg-slate-400 disabled:text-black'disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3} onClick={() => pay(100)}>
+              <button className='bg-slate-800 p-3 rounded-lg disabled:bg-slate-400 disabled:text-black' disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3} onClick={() => pay(100)}>
                 Buy a chai of ₹100
               </button>
-              <button className='bg-slate-800 p-3 rounded-lg disabled:bg-slate-400 disabled:text-black'disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3} onClick={() => pay(200)}>
+              <button className='bg-slate-800 p-3 rounded-lg disabled:bg-slate-400 disabled:text-black' disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3} onClick={() => pay(200)}>
                 Buy a chai of ₹200
               </button>
-              <button className='bg-slate-800 p-3 rounded-lg disabled:bg-slate-400 disabled:text-black'disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3} onClick={() => pay(300)}>
+              <button className='bg-slate-800 p-3 rounded-lg disabled:bg-slate-400 disabled:text-black' disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3} onClick={() => pay(300)}>
                 Buy a chai of ₹300
               </button>
             </div>

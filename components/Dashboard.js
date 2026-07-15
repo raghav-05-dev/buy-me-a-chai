@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 import { fetchuser, updateProfile } from '@/actions/useractions'
-// import { ToastContainer, toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-// import { Bounce } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Bounce } from 'react-toastify';
 
 const Dashboard = () => {
     const { data: session, update } = useSession()
@@ -35,18 +35,17 @@ const Dashboard = () => {
     const handleSubmit = async (e) => {
 
         let a = await updateProfile(e, session.user.name)
-        alert("Profile Updated")
-        // toast('Profile Updated', {
-        //     position: "top-right",
-        //     autoClose: 5000,
-        //     hideProgressBar: false,
-        //     closeOnClick: true,
-        //     pauseOnHover: true,
-        //     draggable: true,
-        //     progress: undefined,
-        //     theme: "light",
-        //     transition: Bounce,
-        //     });
+        toast('Profile Updated', {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+        });
     }
 
 
@@ -55,9 +54,9 @@ const Dashboard = () => {
 
     return (
         <>
-            {/* <ToastContainer
+            <ToastContainer
                 position="top-right"
-                autoClose={5000}
+                autoClose={1000}
                 hideProgressBar={false}
                 newestOnTop={false}
                 closeOnClick
@@ -65,9 +64,9 @@ const Dashboard = () => {
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover
-                theme="light"
+                theme="dark"
             />
-            <ToastContainer /> */}
+            <ToastContainer />
             <div className='container mx-auto py-5 px-6 '>
                 <h1 className='text-center my-5 text-3xl font-bold'>Welcome to your Dashboard</h1>
 
