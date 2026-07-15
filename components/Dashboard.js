@@ -13,7 +13,6 @@ const Dashboard = () => {
     const [form, setform] = useState({})
 
     useEffect(() => {
-        console.log(session)
 
         if (!session) {
             router.push('/login')

@@ -55,7 +55,6 @@ const PaymentPage = ({ username }) => {
     setcurrentUser(u)
     let dbpayments = await fetchpayments(username)
     setPayments(dbpayments)
-    console.log(u, dbpayments)
   }
 
   const pay = async (amount) => {
@@ -105,23 +104,23 @@ const PaymentPage = ({ username }) => {
 
 
       <div className='cover w-full relative'>
-        <img src={currentUser.coverpic} alt="" className="object-cover w-full h-[350]" />
+        <img src={currentUser.coverpic} alt="" className="object-cover w-full h-45 md:h-[350]" />
 
-        <div className='absolute -bottom-10 right-[48%] border border-white rounded-full'>
+        <div className='absolute -bottom-10 right-[40%] md:right-[48%] border border-white rounded-full'>
           <img width={85} height={85} src={currentUser.profilepic} alt="" className="rounded-full" />
         </div>
       </div>
       <div className="info flex flex-col items-center my-10 gap-2 ">
-        <span className="font-bold text-3xl -translate-x-4 mt-2">
+        <span className="font-bold text-3xl md:-translate-x-3 -translate-x-0 mt-2">
           {username}
         </span>
 
-        <span className="text-slate-400 text-lg -translate-x-4 mt-2">
+        <span className="text-slate-400 text-center text-lg -translate-x-4 mt-2 px-6">
           Hi !
           I am a professional illustrator specialized in fantasy art, I create illustrations on universes like The Lord of the Rings, Baldur's Gate, Berserk etc...
         </span>
 
-        <span className="text-slate-400 text-lg -translate-x-4 mt-2">
+        <span className="text-slate-400 text-center text-lg -translate-x-4 mt-2 px-6">
           Welcome, and thank you for your support of my work which guarantees me total autonomy and freedom in my art :)
         </span>
 
@@ -132,8 +131,8 @@ const PaymentPage = ({ username }) => {
           {payments.length} Payments .   ₹{payments.reduce((a, b) => a + b.amount, 0)} raised
         </div>
 
-        <div className="payment flex gap-3 w-[80%] mt-10">
-          <div className="supporters w-1/2 bg-slate-900 rounded-lg p-10">
+        <div className="payment flex gap-3 w-[80%] mt-10 flex-col md:flex-row">
+          <div className="supporters w-full md:w-1/2 bg-slate-900 rounded-lg p-10">
             <h2 className="text-2xl font-bold item mb-5">Top Supporters</h2>
             <ul className='mx-5'>
               {payments.length == 0 && <li>No payments yet</li>}
@@ -144,7 +143,7 @@ const PaymentPage = ({ username }) => {
               })}
             </ul>
           </div>
-          <div className="makepayment w-1/2 bg-slate-900 rounded-lg p-10">
+          <div className="makepayment w-full md:w-1/2 bg-slate-900 rounded-lg p-10">
             <div className="flex items-center ">
               <h2 className="text-2xl font-bold mb-8">
                 Buy me a chai
@@ -170,7 +169,7 @@ const PaymentPage = ({ username }) => {
               />
               <button onClick={() => pay(paymentform.amount)} type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 disabled:from-blue-500" disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3 || paymentform.amount?.length<1}>Make Payment</button>
             </div>
-            <div className='flex gap-2 mt-5'>
+            <div className='flex flex-col md:flex-row gap-2 mt-5'>
               <button className='bg-slate-800 p-3 rounded-lg disabled:bg-slate-400 disabled:text-black' disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3} onClick={() => pay(100)}>
                 Buy a chai of ₹100
               </button>

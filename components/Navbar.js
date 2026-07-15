@@ -14,11 +14,11 @@ const Navbar = () => {
   // }
 
   return (
-    <nav className='bg-gray-900 text-white flex justify-between p-4 h-16'>
+    <nav className='bg-gray-900 text-white flex justify-between p-4 md:h-16 flex-col md:flex-row'>
       <div>
         <Link className='logo font-bold text-lg flex justify-center items-center' href={'/'}>
           <img className='invertImg' src="tea.gif" width={45} alt="" />
-          <span>Buy me a chai</span>
+          <span className='text-3xl md:text-base my-3 md:my-0'>Buy me a chai</span>
         </Link>
       </div>
       {/* <ul className='flex justify-between gap-4'>
@@ -28,7 +28,7 @@ const Navbar = () => {
         <li>Sign up</li>
         <li>Login</li>
       </ul> */}
-      <div className='relative flex justify-center items-center  md:block gap-4'>
+      <div className='relative flex flex-col justify-between items-center md:block gap-4'>
         {session && <>
           <button onClick={() => setShowdropdown(!showdropdown)} onBlur={() => {
             setTimeout(() => {
