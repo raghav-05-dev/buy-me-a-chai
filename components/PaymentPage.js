@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Bounce } from 'react-toastify';
 import { useRouter } from 'next/navigation'
+import { notFound } from "next/navigation"
 
 const PaymentPage = ({ username }) => {
   // const {data: session} = useSession()
@@ -133,7 +134,7 @@ const PaymentPage = ({ username }) => {
 
         <div className="payment flex gap-3 w-[80%] mt-10">
           <div className="supporters w-1/2 bg-slate-900 rounded-lg p-10">
-            <h2 className="text-2xl font-bold item mb-5">Supporters</h2>
+            <h2 className="text-2xl font-bold item mb-5">Top Supporters</h2>
             <ul className='mx-5'>
               {payments.length == 0 && <li>No payments yet</li>}
               {payments.map((p, i) => {
@@ -167,7 +168,7 @@ const PaymentPage = ({ username }) => {
                 className='w-full p-3 rounded-lg bg-slate-800'
                 placeholder='Enter Amount'
               />
-              <button onClick={() => pay(paymentform.amount)} type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 disabled:from-blue-500" disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3}>Make Payment</button>
+              <button onClick={() => pay(paymentform.amount)} type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 disabled:from-blue-500" disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3 || paymentform.amount?.length<1}>Make Payment</button>
             </div>
             <div className='flex gap-2 mt-5'>
               <button className='bg-slate-800 p-3 rounded-lg disabled:bg-slate-400 disabled:text-black' disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3} onClick={() => pay(100)}>
