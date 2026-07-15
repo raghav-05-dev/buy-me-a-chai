@@ -4,6 +4,11 @@ import Script from 'next/script'
 import { fetchpayments, initiate } from '@/actions/useractions'
 import { useSession } from 'next-auth/react'
 import { fetchuser } from '@/actions/useractions'
+import { useSearchParams } from 'next/navigation'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Bounce } from 'react-toastify';
+import { useRouter } from 'next/navigation'
 
 const PaymentPage = ({ username }) => {
   // const {data: session} = useSession()
@@ -14,16 +19,37 @@ const PaymentPage = ({ username }) => {
   })
   const [currentUser, setcurrentUser] = useState({})
   const [payments, setPayments] = useState([])
-   
-  useEffect(()=>{
+  const searchParams = useSearchParams()
+  const router = useRouter()
+
+
+  useEffect(() => {
     getData()
-  },[])
+  }, [])
+
+  useEffect(() => {
+        if(searchParams.get("paymentdone") == "true"){
+        toast('Thanks for your donation!', {
+            position: "top-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Bounce,
+            });
+        }
+        router.push(`/${username}`)
+     
+    }, [])
 
   const handleChange = (e) => {
     setPaymentform({ ...paymentform, [e.target.name]: e.target.value })
   }
 
-  const getData = async()=>{
+  const getData = async () => {
     let u = await fetchuser(username)
     setcurrentUser(u)
     let dbpayments = await fetchpayments(username)
@@ -35,7 +61,7 @@ const PaymentPage = ({ username }) => {
     let a = await initiate(amount, username, paymentform)
     let orderId = a.id
     var options = {
-      "key": process.env.NEXT_PUBLIC_KEY_ID, // Enter the Key ID generated from the Dashboard
+      "key": currentUser.razorpayid, // Enter the Key ID generated from the Dashboard
       "amount": amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       "currency": "INR",
       "name": "Buy Me A Chai", //your business name
@@ -60,15 +86,28 @@ const PaymentPage = ({ username }) => {
   }
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark" />
+      {/* Same as */}
+      <ToastContainer />
       <Script src="https://checkout.razorpay.com/v1/checkout.js"></Script>
 
 
 
       <div className='cover w-full relative'>
-        <img src="https://c10.patreonusercontent.com/4/patreon-media/p/campaign/233251/c5f2f693613043ec9dc2529805dc1bb5/eyJ3Ijo5NjAsIndlIjoxfQ%3D%3D/5.jpg?token-hash=asevgMlIX8oKMvdwEEqztj7xP62EIWlZx0fC0ZSfVVg%3D&token-time=1785801600" alt="" className="object-cover w-full h-[350]" />
+        <img src={currentUser.coverpic} alt="" className="object-cover w-full h-[350]" />
 
         <div className='absolute -bottom-10 right-[48%] border border-white rounded-full'>
-          <img width={85} height={85} src="https://c10.patreonusercontent.com/4/patreon-media/p/campaign/233251/00c09a848e884d3180dd3dacad265984/eyJoIjoxMDAsInciOjEwMH0%3D/2.jpeg?token-hash=1eh6g430zL82-Ws6dz-dpg4VCvFpvUA591dnSALEsao%3D&token-time=1785196800" alt="" className="rounded-full" />
+          <img width={85} height={85} src={currentUser.profilepic} alt="" className="rounded-full" />
         </div>
       </div>
       <div className="info flex flex-col items-center my-10 gap-2 ">
@@ -87,11 +126,12 @@ const PaymentPage = ({ username }) => {
         <div className="payment flex gap-3 w-[80%] mt-10">
           <div className="supporters w-1/2 bg-slate-900 rounded-lg p-10">
             <h2 className="text-2xl font-bold item mb-5">Supporters</h2>
-            <ul className='mx-5 text-'>
-              {payments.map((p, i)=>{
+            <ul className='mx-5'>
+              {payments.length == 0 && <li>No payments yet</li>}
+              {payments.map((p, i) => {
                 return <li key={p._id} className='my-4 flex gap-2 items-center'>
-                <img width={35} src="avatar.gif" alt="user avatar" />
-                <span>{p.name} donated <span className='font-bold'>₹{p.amount}</span> with the message "{p.message}"</span></li>
+                  <img width={35} src="avatar.gif" alt="user avatar" />
+                  <span>{p.name} bought you a chai of <span className='font-bold'>₹{p.amount}</span> with the message "{p.message}"</span></li>
               })}
             </ul>
           </div>
@@ -119,17 +159,17 @@ const PaymentPage = ({ username }) => {
                 className='w-full p-3 rounded-lg bg-slate-800'
                 placeholder='Enter Amount'
               />
-              <button onClick={() => pay(paymentform.amount)} type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2">Make Payment</button>
+              <button onClick={() => pay(paymentform.amount)} type="button" className="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mb-2 disabled:from-blue-500" disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3}>Make Payment</button>
             </div>
             <div className='flex gap-2 mt-5'>
-              <button className='bg-slate-800 p-3 rounded-lg' onClick={() => pay(10000)}>
-                Pay ₹100
+              <button className='bg-slate-800 p-3 rounded-lg disabled:bg-slate-400 disabled:text-black'disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3} onClick={() => pay(100)}>
+                Buy a chai of ₹100
               </button>
-              <button className='bg-slate-800 p-3 rounded-lg' onClick={() => pay(20000)}>
-                Pay ₹200
+              <button className='bg-slate-800 p-3 rounded-lg disabled:bg-slate-400 disabled:text-black'disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3} onClick={() => pay(200)}>
+                Buy a chai of ₹200
               </button>
-              <button className='bg-slate-800 p-3 rounded-lg' onClick={() => pay(30000)}>
-                Pay ₹300
+              <button className='bg-slate-800 p-3 rounded-lg disabled:bg-slate-400 disabled:text-black'disabled={paymentform.name?.length < 3 || paymentform.message?.length < 3} onClick={() => pay(300)}>
+                Buy a chai of ₹300
               </button>
             </div>
           </div>

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from 'next/navigation'
-// import { fetchuser, updateProfile } from '@/actions/useractions'
+import { fetchuser, updateProfile } from '@/actions/useractions'
 // import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 // import { Bounce } from 'react-toastify';
@@ -18,15 +18,15 @@ const Dashboard = () => {
         if (!session) {
             router.push('/login')
         }
-        // else {
-        //     getData()
-        // }
+        else {
+            getData()
+        }
     }, [])
 
-    // const getData = async () => {
-    //     let u = await fetchuser(session.user.name)
-    //     setform(u)
-    // }
+    const getData = async () => {
+        let u = await fetchuser(session.user.name)
+        setform(u)
+    }
 
     const handleChange = (e) => {
         setform({ ...form, [e.target.name]: e.target.value })
@@ -35,17 +35,18 @@ const Dashboard = () => {
     const handleSubmit = async (e) => {
 
         let a = await updateProfile(e, session.user.name)
-        toast('Profile Updated', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-            });
+        alert("Profile Updated")
+        // toast('Profile Updated', {
+        //     position: "top-right",
+        //     autoClose: 5000,
+        //     hideProgressBar: false,
+        //     closeOnClick: true,
+        //     pauseOnHover: true,
+        //     draggable: true,
+        //     progress: undefined,
+        //     theme: "light",
+        //     transition: Bounce,
+        //     });
     }
 
 
